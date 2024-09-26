@@ -1,0 +1,39 @@
+config:
+  postgresDb: postgresdb
+  postgresPassword: mypass
+  postgresUser: admin
+dbDeployment:
+  postgresDb:
+    image:
+      repository: postgres
+      tag: "10.1"
+    imagePullPolicy: IfNotPresent
+  replicas: 1
+kubernetesClusterDomain: cluster.local
+nodejsAppDeployment:
+  nodejsApp:
+    image:
+      repository: node
+      tag: 19-alpine3.16
+  replicas: 4
+postgres:
+  ports:
+  - port: 5432
+    targetPort: 0
+  type: NodePort
+pvc:
+  pvClaim:
+    storageClass: manual
+    storageRequest: 5Gi
+webHttpdDeployment:
+  replicas: 10
+  webHttpd:
+    image:
+      repository: httpd
+      tag: 2.4.55
+webHttpdService:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  type: NodePort
